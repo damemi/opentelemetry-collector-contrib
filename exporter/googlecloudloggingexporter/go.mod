@@ -1,4 +1,4 @@
-module github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudloggingexporter
+module github.com/braydonk/opentelemetry-collector-contrib/exporter/googlecloudloggingexporter
 
 go 1.17
 
