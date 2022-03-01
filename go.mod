@@ -44,6 +44,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/tanzuobservabilityexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/tencentcloudlogserviceexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/zipkinexporter v0.45.1
+	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudloggingexporter 0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/asapauthextension v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/awsproxy v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/basicauthextension v0.45.1
@@ -769,6 +770,10 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/windo
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver => ./receiver/zipkinreceiver
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver => ./receiver/zookeeperreceiver
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver => ./receiver/zookeeperreceiver
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudloggingexporter => ./exporter/googlecloudloggingexporter
 
 // see https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/4433
 exclude github.com/StackExchange/wmi v1.2.0
