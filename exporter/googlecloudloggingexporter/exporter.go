@@ -13,6 +13,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var httpRequestKey = "http://www.googleapis.com/logging/httpRequest"
+
 type exporter struct {
 	Config             *Config
 	logger             *zap.Logger
@@ -127,7 +129,7 @@ func logsToEntries(logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
 			logs := ils.LogRecords()
 			for k := 0; k < logs.Len(); k++ {
 				log := logs.At(k)
-				entry, err := logToEntry(resourceAttrs, log)
+				entry, err := logToEntry(logger, resourceAttrs, log)
 				if err != nil {
 					logger.Debug("Failed to convert to Cloud Logging Entry", zap.Error(err))
 					dropped++
@@ -144,17 +146,24 @@ type entryPayload struct {
 	Message string `json:"message"`
 }
 
-func logToEntry(attributes map[string]interface{}, log pdata.LogRecord) (logging.Entry, error) {
+func logToEntry(logger *zap.Logger, attributes map[string]interface{}, log pdata.LogRecord) (logging.Entry, error) {
 	payload := entryPayload{
 		Message: log.Body().AsString(),
 	}
-	return logging.Entry{
+
+	entry := logging.Entry{
 		Payload:   payload,
 		Timestamp: log.Timestamp().AsTime(),
 		Severity:  logging.Severity(log.SeverityNumber()),
 		Trace:     log.TraceID().HexString(),
 		SpanID:    log.SpanID().HexString(),
-	}, nil
+	}
+
+	if httpRequestAttribute, ok := log.Attributes().Get(httpRequestKey); ok {
+		logger.Debug("found httpRequestAttribute", zap.String("httpRequest", httpRequestAttribute.AsString()))
+	}
+
+	return entry, nil
 }
 
 func attrsValue(attrs pdata.AttributeMap) map[string]interface{} {
