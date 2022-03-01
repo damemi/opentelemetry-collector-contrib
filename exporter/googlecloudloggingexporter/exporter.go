@@ -14,10 +14,11 @@ import (
 )
 
 type exporter struct {
-	Config      *Config
-	logger      *zap.Logger
-	collectorID string
-	cloudLogger *logging.Logger
+	Config             *Config
+	logger             *zap.Logger
+	collectorID        string
+	cloudLoggingClient *logging.Client
+	cloudLogger        *logging.Logger
 }
 
 func newCloudLoggingExporter(config *Config, params component.ExporterCreateSettings) (component.LogsExporter, error) {
@@ -59,15 +60,15 @@ func newCloudLoggingLogExporter(config *Config, params component.ExporterCreateS
 	if err != nil {
 		return nil, fmt.Errorf("failed to create Google Cloud Logging client: %v", err)
 	}
-	defer client.Close()
 	logger := client.Logger(config.LogName)
 
 	// Create the logging exporter.
 	loggingExporter := &exporter{
-		Config:      config,
-		logger:      params.Logger,
-		collectorID: collectorIdentifier.String(),
-		cloudLogger: logger,
+		Config:             config,
+		logger:             params.Logger,
+		collectorID:        collectorIdentifier.String(),
+		cloudLoggingClient: client,
+		cloudLogger:        logger,
 	}
 	return loggingExporter, nil
 }
@@ -105,6 +106,7 @@ func (e *exporter) Shutdown(ctx context.Context) error {
 			return err
 		}
 	}
+	e.cloudLoggingClient.Close()
 	return nil
 }
 
