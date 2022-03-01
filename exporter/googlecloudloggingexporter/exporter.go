@@ -74,7 +74,7 @@ func newCloudLoggingLogExporter(config *Config, params component.ExporterCreateS
 }
 
 func (e *exporter) ConsumeLogs(ctx context.Context, ld pdata.Logs) error {
-	logEntries, dropped := logsToEntries(e.Config, e.logger, ld)
+	logEntries, dropped := logsToEntries(e.logger, ld)
 	if len(logEntries) == 0 {
 		return nil
 	}
@@ -114,7 +114,7 @@ func (e *exporter) Start(ctx context.Context, host component.Host) error {
 	return nil
 }
 
-func logsToEntries(config *Config, logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
+func logsToEntries(logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
 	entries := []logging.Entry{}
 	dropped := 0
 	rls := ld.ResourceLogs()
@@ -127,7 +127,7 @@ func logsToEntries(config *Config, logger *zap.Logger, ld pdata.Logs) ([]logging
 			logs := ils.LogRecords()
 			for k := 0; k < logs.Len(); k++ {
 				log := logs.At(k)
-				entry, err := logToEntry(config, resourceAttrs, log)
+				entry, err := logToEntry(resourceAttrs, log)
 				if err != nil {
 					logger.Debug("Failed to convert to Cloud Logging Entry", zap.Error(err))
 					dropped++
@@ -144,7 +144,7 @@ type entryPayload struct {
 	Message string `json:"message"`
 }
 
-func logToEntry(config *Config, attributes map[string]interface{}, log pdata.LogRecord) (logging.Entry, error) {
+func logToEntry(attributes map[string]interface{}, log pdata.LogRecord) (logging.Entry, error) {
 	payload := entryPayload{
 		Message: log.Body().AsString(),
 	}
@@ -152,7 +152,6 @@ func logToEntry(config *Config, attributes map[string]interface{}, log pdata.Log
 		Payload:   payload,
 		Timestamp: log.Timestamp().AsTime(),
 		Severity:  logging.Severity(log.SeverityNumber()),
-		LogName:   config.LogName,
 		Trace:     log.TraceID().HexString(),
 		SpanID:    log.SpanID().HexString(),
 	}, nil
