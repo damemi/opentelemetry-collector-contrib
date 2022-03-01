@@ -21,7 +21,7 @@ type exporter struct {
 }
 
 func newCloudLoggingExporter(config *Config, params component.ExporterCreateSettings) (component.LogsExporter, error) {
-	loggingExporter, err := newCloudLoggingExporter(config, params)
+	loggingExporter, err := newCloudLoggingLogExporter(config, params)
 	if err != nil {
 		return nil, err
 	}
