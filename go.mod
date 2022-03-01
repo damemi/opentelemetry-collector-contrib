@@ -20,6 +20,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/f5cloudexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudexporter v0.45.1
+	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudloggingexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/honeycombexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/humioexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/influxdbexporter v0.45.1
@@ -44,7 +45,6 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/tanzuobservabilityexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/tencentcloudlogserviceexporter v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/zipkinexporter v0.45.1
-	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudloggingexporter 0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/asapauthextension v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/awsproxy v0.45.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/basicauthextension v0.45.1
@@ -132,6 +132,7 @@ require (
 	bitbucket.org/atlassian/go-asap/v2 v2.6.0 // indirect
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.3.0 // indirect
+	cloud.google.com/go/logging v1.4.2 // indirect
 	cloud.google.com/go/monitoring v1.1.0 // indirect
 	cloud.google.com/go/spanner v1.29.0 // indirect
 	cloud.google.com/go/trace v1.0.0 // indirect
@@ -768,8 +769,6 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/wavef
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/windowsperfcountersreceiver => ./receiver/windowsperfcountersreceiver
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver => ./receiver/zipkinreceiver
-
-replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver => ./receiver/zookeeperreceiver
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver => ./receiver/zookeeperreceiver
 
