@@ -41,7 +41,7 @@ func logToEntry(
 	logger *zap.Logger,
 	attributes map[string]interface{},
 	log pdata.LogRecord) (logging.Entry, error) {
-	httpRequest, message, err := parseHttpRequest(log.Body().AsString())
+	httpRequest, message, err := parseHttpRequest(logger, log.Body().AsString())
 	if err != nil {
 		logger.Debug("error parsing HTTPRequest", zap.Error(err))
 	}
@@ -83,7 +83,7 @@ type httpRequestLog struct {
 	Protocol                       string `json:"protocol"`
 }
 
-func parseHttpRequest(message string) (*logging.HTTPRequest, string, error) {
+func parseHttpRequest(logger *zap.Logger, message string) (*logging.HTTPRequest, string, error) {
 	parsedLog, strippedMessage, err := extractHttpRequestFromLog(message)
 	if err != nil {
 		return nil, message, err
@@ -95,17 +95,11 @@ func parseHttpRequest(message string) (*logging.HTTPRequest, string, error) {
 	}
 	req.Header.Set("Referer", parsedLog.Referer)
 
-	latency, err := time.ParseDuration(parsedLog.Latency)
-	if err != nil {
-		return nil, message, err
-	}
-
 	httpRequest := &logging.HTTPRequest{
 		Request:                        req,
 		RequestSize:                    parsedLog.RequestSize,
 		Status:                         parsedLog.Status,
 		ResponseSize:                   parsedLog.ResponseSize,
-		Latency:                        latency,
 		LocalIP:                        parsedLog.ServerIP,
 		RemoteIP:                       parsedLog.RemoteIP,
 		CacheHit:                       parsedLog.CacheHit,
@@ -113,6 +107,15 @@ func parseHttpRequest(message string) (*logging.HTTPRequest, string, error) {
 		CacheFillBytes:                 parsedLog.CacheFillBytes,
 		CacheLookup:                    parsedLog.CacheLookup,
 	}
+	if parsedLog.Latency != "" {
+		latency, err := time.ParseDuration(parsedLog.Latency)
+		if err != nil {
+			logger.Debug("Failed to parse latency", zap.Error(err))
+		} else {
+			httpRequest.Latency = latency
+		}
+	}
+
 	return httpRequest, strippedMessage, nil
 }
 
