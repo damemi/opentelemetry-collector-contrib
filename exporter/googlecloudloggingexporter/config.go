@@ -28,11 +28,11 @@ func (c Config) Validate() error {
 	return nil
 }
 
-func (config *Config) enforcedQueueSettings() exporterhelper.QueueSettings {
+func (c Config) enforcedQueueSettings() exporterhelper.QueueSettings {
 	return exporterhelper.QueueSettings{
 		Enabled: true,
 		// due to the sequence token, there can be only one request in flight
 		NumConsumers: 1,
-		QueueSize:    config.QueueSettings.QueueSize,
+		QueueSize:    c.QueueSettings.QueueSize,
 	}
 }

@@ -16,7 +16,7 @@ import (
 var httpRequestKey = "http://www.googleapis.com/logging/httpRequest"
 
 type exporter struct {
-	Config             *Config
+	config             *Config
 	logger             *zap.Logger
 	collectorID        string
 	cloudLoggingClient *logging.Client
@@ -66,7 +66,7 @@ func newCloudLoggingLogExporter(config *Config, params component.ExporterCreateS
 
 	// Create the logging exporter.
 	loggingExporter := &exporter{
-		Config:             config,
+		config:             config,
 		logger:             params.Logger,
 		collectorID:        collectorIdentifier.String(),
 		cloudLoggingClient: client,
@@ -114,97 +114,4 @@ func (e *exporter) Shutdown(ctx context.Context) error {
 
 func (e *exporter) Start(ctx context.Context, host component.Host) error {
 	return nil
-}
-
-func logsToEntries(logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
-	entries := []logging.Entry{}
-	dropped := 0
-	rls := ld.ResourceLogs()
-	for i := 0; i < rls.Len(); i++ {
-		rl := rls.At(i)
-		resourceAttrs := attrsValue(rl.Resource().Attributes())
-		ills := rl.InstrumentationLibraryLogs()
-		for j := 0; j < ills.Len(); j++ {
-			ils := ills.At(j)
-			logs := ils.LogRecords()
-			for k := 0; k < logs.Len(); k++ {
-				log := logs.At(k)
-				entry, err := logToEntry(logger, resourceAttrs, log)
-				if err != nil {
-					logger.Debug("Failed to convert to Cloud Logging Entry", zap.Error(err))
-					dropped++
-				} else {
-					entries = append(entries, entry)
-				}
-			}
-		}
-	}
-	return entries, dropped
-}
-
-type entryPayload struct {
-	Message string `json:"message"`
-}
-
-func logToEntry(logger *zap.Logger, attributes map[string]interface{}, log pdata.LogRecord) (logging.Entry, error) {
-	payload := entryPayload{
-		Message: log.Body().AsString(),
-	}
-
-	entry := logging.Entry{
-		Payload:   payload,
-		Timestamp: log.Timestamp().AsTime(),
-		Severity:  logging.Severity(log.SeverityNumber()),
-		Trace:     log.TraceID().HexString(),
-		SpanID:    log.SpanID().HexString(),
-	}
-
-	if httpRequestAttribute, ok := log.Attributes().Get(httpRequestKey); ok {
-		logger.Debug("found httpRequestAttribute", zap.String("httpRequest", httpRequestAttribute.AsString()))
-	}
-
-	return entry, nil
-}
-
-func attrsValue(attrs pdata.AttributeMap) map[string]interface{} {
-	if attrs.Len() == 0 {
-		return nil
-	}
-	out := make(map[string]interface{}, attrs.Len())
-	attrs.Range(func(k string, v pdata.AttributeValue) bool {
-		out[k] = attrValue(v)
-		return true
-	})
-	return out
-}
-
-func attrValue(value pdata.AttributeValue) interface{} {
-	switch value.Type() {
-	case pdata.AttributeValueTypeInt:
-		return value.IntVal()
-	case pdata.AttributeValueTypeBool:
-		return value.BoolVal()
-	case pdata.AttributeValueTypeDouble:
-		return value.DoubleVal()
-	case pdata.AttributeValueTypeString:
-		return value.StringVal()
-	case pdata.AttributeValueTypeMap:
-		values := map[string]interface{}{}
-		value.MapVal().Range(func(k string, v pdata.AttributeValue) bool {
-			values[k] = attrValue(v)
-			return true
-		})
-		return values
-	case pdata.AttributeValueTypeArray:
-		arrayVal := value.SliceVal()
-		values := make([]interface{}, arrayVal.Len())
-		for i := 0; i < arrayVal.Len(); i++ {
-			values[i] = attrValue(arrayVal.At(i))
-		}
-		return values
-	case pdata.AttributeValueTypeEmpty:
-		return nil
-	default:
-		return nil
-	}
 }
