@@ -46,21 +46,25 @@ func logToEntry(
 		logger.Debug("error parsing HTTPRequest", zap.Error(err))
 	}
 
-	type entryPayload struct {
-		Message string `json:"message"`
-	}
-	payload := entryPayload{
-		Message: message,
-	}
-
-	return logging.Entry{
-		Payload:     payload,
+	entry := logging.Entry{
 		HTTPRequest: httpRequest,
 		Timestamp:   log.Timestamp().AsTime(),
 		Severity:    logging.Severity(log.SeverityNumber()),
 		Trace:       log.TraceID().HexString(),
 		SpanID:      log.SpanID().HexString(),
-	}, nil
+	}
+
+	if message != "" {
+		type entryPayload struct {
+			Message string `json:"message"`
+		}
+		payload := entryPayload{
+			Message: message,
+		}
+		entry.Payload = payload
+	}
+
+	return entry, nil
 }
 
 // JSON keys derived from:
@@ -94,6 +98,7 @@ func parseHttpRequest(logger *zap.Logger, message string) (*logging.HTTPRequest,
 		return nil, message, err
 	}
 	req.Header.Set("Referer", parsedLog.Referer)
+	req.Header.Set("User-Agent", parsedLog.UserAgent)
 
 	httpRequest := &logging.HTTPRequest{
 		Request:                        req,
