@@ -68,9 +68,9 @@ func logToEntry(
 type httpRequestLog struct {
 	RequestMethod                  string `json:"requestMethod"`
 	RequestURL                     string `json:"requestUrl"`
-	RequestSize                    int64  `json:"requestSize"`
-	Status                         int    `json:"status"`
-	ResponseSize                   int64  `json:"responseSize"`
+	RequestSize                    int64  `json:"requestSize,string"`
+	Status                         int    `json:"status,string"`
+	ResponseSize                   int64  `json:"responseSize,string"`
 	UserAgent                      string `json:"userAgent"`
 	RemoteIP                       string `json:"remoteIp"`
 	ServerIP                       string `json:"serverIp"`
@@ -79,7 +79,7 @@ type httpRequestLog struct {
 	CacheLookup                    bool   `json:"cacheLookup"`
 	CacheHit                       bool   `json:"cacheHit"`
 	CacheValidatedWithOriginServer bool   `json:"cacheValidatedWithOriginServer"`
-	CacheFillBytes                 int64  `json:"cacheFillBytes"`
+	CacheFillBytes                 int64  `json:"cacheFillBytes,string"`
 	Protocol                       string `json:"protocol"`
 }
 
