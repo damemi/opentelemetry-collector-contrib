@@ -30,7 +30,7 @@ func (c Config) Validate() error {
 
 func (c Config) enforcedQueueSettings() exporterhelper.QueueSettings {
 	return exporterhelper.QueueSettings{
-		Enabled: true,
+		Enabled: c.QueueSettings.Enabled,
 		// due to the sequence token, there can be only one request in flight
 		NumConsumers: 1,
 		QueueSize:    c.QueueSettings.QueueSize,
