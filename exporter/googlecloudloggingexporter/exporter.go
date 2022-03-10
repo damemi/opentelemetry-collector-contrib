@@ -32,7 +32,7 @@ func newCloudLoggingExporter(config *Config, params component.ExporterCreateSett
 		config,
 		params,
 		loggingExporter.ConsumeLogs,
-		exporterhelper.WithQueue(config.enforcedQueueSettings()),
+		exporterhelper.WithQueue(config.QueueSettings),
 		exporterhelper.WithRetry(config.RetrySettings))
 }
 

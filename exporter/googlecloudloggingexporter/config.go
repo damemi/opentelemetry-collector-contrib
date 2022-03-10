@@ -27,12 +27,3 @@ type Config struct {
 func (c Config) Validate() error {
 	return nil
 }
-
-func (c Config) enforcedQueueSettings() exporterhelper.QueueSettings {
-	return exporterhelper.QueueSettings{
-		Enabled: c.QueueSettings.Enabled,
-		// due to the sequence token, there can be only one request in flight
-		NumConsumers: 1,
-		QueueSize:    c.QueueSettings.QueueSize,
-	}
-}
