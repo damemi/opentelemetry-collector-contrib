@@ -12,6 +12,8 @@ type Config struct {
 	UserAgent               string `mapstructure:"user_agent"`
 	LogName                 string `mapstructure:"log_name"`
 
+	ParseHttpRequest bool `mapstructure:"parse_http_request"`
+
 	Endpoint string `mapstructure:"endpoint"`
 	// Only has effect if Endpoint is not ""
 	UseInsecure bool `mapstructure:"use_insecure"`

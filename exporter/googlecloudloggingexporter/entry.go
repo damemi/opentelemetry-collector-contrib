@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func logsToEntries(logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
+func logsToEntries(logger *zap.Logger, ld pdata.Logs, config *Config) ([]logging.Entry, int) {
 	entries := []logging.Entry{}
 	dropped := 0
 	rls := ld.ResourceLogs()
@@ -24,7 +24,7 @@ func logsToEntries(logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
 			logs := ils.LogRecords()
 			for k := 0; k < logs.Len(); k++ {
 				log := logs.At(k)
-				entry, err := logToEntry(logger, resourceAttrs, log)
+				entry, err := logToEntry(logger, resourceAttrs, log, config)
 				if err != nil {
 					logger.Debug("Failed to convert to Cloud Logging Entry", zap.Error(err))
 					dropped++
@@ -40,18 +40,24 @@ func logsToEntries(logger *zap.Logger, ld pdata.Logs) ([]logging.Entry, int) {
 func logToEntry(
 	logger *zap.Logger,
 	attributes map[string]interface{},
-	log pdata.LogRecord) (logging.Entry, error) {
-	httpRequest, message, err := parseHttpRequest(logger, log.Body().AsString())
-	if err != nil {
-		logger.Debug("error parsing HTTPRequest", zap.Error(err))
-	}
-
+	log pdata.LogRecord,
+	config *Config) (logging.Entry, error) {
 	entry := logging.Entry{
-		HTTPRequest: httpRequest,
-		Timestamp:   log.Timestamp().AsTime(),
-		Severity:    logging.Severity(log.SeverityNumber()),
-		Trace:       log.TraceID().HexString(),
-		SpanID:      log.SpanID().HexString(),
+		Timestamp: log.Timestamp().AsTime(),
+		Severity:  logging.Severity(log.SeverityNumber()),
+		Trace:     log.TraceID().HexString(),
+		SpanID:    log.SpanID().HexString(),
+	}
+	message := log.Body().AsString()
+
+	if config.ParseHttpRequest {
+		httpRequest, strippedMessage, err := parseHttpRequest(logger, message)
+		if err != nil {
+			logger.Debug("error parsing HTTPRequest", zap.Error(err))
+		} else {
+			entry.HTTPRequest = httpRequest
+			message = strippedMessage
+		}
 	}
 
 	if message != "" {

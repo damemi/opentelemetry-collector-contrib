@@ -76,7 +76,7 @@ func newCloudLoggingLogExporter(config *Config, params component.ExporterCreateS
 }
 
 func (e *exporter) ConsumeLogs(ctx context.Context, ld pdata.Logs) error {
-	logEntries, dropped := logsToEntries(e.logger, ld)
+	logEntries, dropped := logsToEntries(e.logger, ld, e.config)
 	if len(logEntries) == 0 {
 		return nil
 	}
