@@ -20,7 +20,9 @@ require (
 )
 
 require (
+	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.6.0 // indirect
+	cloud.google.com/go/logging v1.4.2 // indirect
 	cloud.google.com/go/monitoring v1.4.0 // indirect
 	cloud.google.com/go/trace v1.2.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.4.0 // indirect
@@ -61,3 +63,7 @@ require (
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/opencensus => ../../pkg/translator/opencensus
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal => ../../internal/coreinternal
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector => ../../../../GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace => github.com/damemi/opentelemetry-operations-go/exporter/trace v1.3.1-0.20220322175028-001c74308a0d
