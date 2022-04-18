@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/common v0.46.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	go.opentelemetry.io/collector v0.46.1-0.20220307173244-f980c9ef25b1
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	google.golang.org/api v0.72.0
