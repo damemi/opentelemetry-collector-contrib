@@ -24,8 +24,18 @@ package main
 import (
 	"github.com/open-telemetry/opentelemetry-collector-contrib/internal/components"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/internal/otelcontribcore"
+
+	"cloud.google.com/go/profiler"
 )
 
 func main() {
+	cfg := profiler.Config{
+		Service:        "otelcontribcol",
+		ServiceVersion: "v0.55.0-dirty",
+		ProjectID:      "mikedame-gke-test",
+	}
+	if err := profiler.Start(cfg); err != nil {
+		panic(err)
+	}
 	otelcontribcore.RunWithComponents(components.Components)
 }
