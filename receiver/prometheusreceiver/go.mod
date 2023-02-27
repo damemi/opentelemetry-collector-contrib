@@ -204,4 +204,6 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/prometheusremotewrite => ../../pkg/translator/prometheusremotewrite
 
+replace github.com/prometheus/prometheus => ../../../../prometheus/prometheus
+
 retract v0.65.0

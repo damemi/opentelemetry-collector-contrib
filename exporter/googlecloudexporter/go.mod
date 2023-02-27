@@ -68,3 +68,5 @@ require (
 )
 
 retract v0.65.0
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector => ../../../../GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector

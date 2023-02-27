@@ -83,11 +83,13 @@ func newTransaction(
 
 // Append always returns 0 to disable label caching.
 func (t *transaction) Append(ref storage.SeriesRef, ls labels.Labels, atMs int64, val float64) (storage.SeriesRef, error) {
-	select {
-	case <-t.ctx.Done():
-		return 0, errTransactionAborted
-	default:
-	}
+	/*
+		select {
+		case <-t.ctx.Done():
+			return 0, errTransactionAborted
+		default:
+		}
+	*/
 
 	if len(t.externalLabels) != 0 {
 		ls = append(ls, t.externalLabels...)

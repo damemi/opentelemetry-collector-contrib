@@ -97,3 +97,11 @@ retract v0.65.0
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/prometheus => ../../pkg/translator/prometheus
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/internal/common => ../../internal/common
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector => ../../../../GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector/googlemanagedprometheus => ../../../../GoogleCloudPlatform/opentelemetry-operations-go/exporter/collector/googlemanagedprometheus
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace => ../../../../GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace
+
+replace github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping => ../../../../GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping
