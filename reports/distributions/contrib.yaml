@@ -64,6 +64,7 @@ components:
         - ecs_observer
         - ecs_task_observer
         - file_storage
+        - googleclientauth
         - headers_setter
         - health_check
         - host_observer
