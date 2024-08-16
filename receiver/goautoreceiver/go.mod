@@ -82,4 +82,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace go.opentelemetry.io/auto => github.com/damemi/opentelemetry-go-instrumentation v0.0.0-20240816130527-cf0724bac10b
+replace go.opentelemetry.io/auto => github.com/damemi/opentelemetry-go-instrumentation v0.0.0-20240816142033-5691e3faaf6e
