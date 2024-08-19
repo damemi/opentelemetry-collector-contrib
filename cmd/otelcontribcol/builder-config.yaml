@@ -217,6 +217,7 @@ receivers:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/windowseventlogreceiver v0.107.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver v0.107.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver v0.107.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/goautoreceiver v0.107.0
 
 connectors:
   - gomod: go.opentelemetry.io/collector/connector/forwardconnector v0.107.1-0.20240816132030-9fd84668bb02
@@ -491,3 +492,5 @@ replaces:
   - github.com/open-telemetry/opentelemetry-collector-contrib/receiver/otelarrowreceiver => ../../receiver/otelarrowreceiver
   - github.com/open-telemetry/opentelemetry-collector-contrib/extension/observer/cfgardenobserver => ../../extension/observer/cfgardenobserver
   - github.com/open-telemetry/opentelemetry-collector-contrib/exporter/rabbitmqexporter => ../../exporter/rabbitmqexporter
+  - github.com/open-telemetry/opentelemetry-collector-contrib/receiver/goautoreceiver => ../../receiver/goautoreceiver
+  - go.opentelemetrty.io/auto => github.com/damemi/opentelemetry-go-instrumentation v0.0.0-20240816142033-5691e3faaf6e
